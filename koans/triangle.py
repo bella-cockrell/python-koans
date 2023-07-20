@@ -17,6 +17,9 @@
 #   about_triangle_project_2.py
 #
 def triangle(a, b, c):
+
+    _valid_triange_check(a, b, c)
+
     if a == b == c:
         return "equilateral"
     elif (a == b) | (a == c) | (b == c):
@@ -27,3 +30,14 @@ def triangle(a, b, c):
 # Error class used in part 2.  No need to change this code.
 class TriangleError(Exception):
     pass
+
+def _valid_triange_check(a, b, c):
+    
+    if a | b | c <= 0:
+        raise TriangleError
+    if a + b < c:
+        raise TriangleError
+    if a + c < b:
+        raise TriangleError
+    if b + c < a:
+        raise TriangleError

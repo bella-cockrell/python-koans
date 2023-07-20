@@ -21,5 +21,7 @@ class AboutTriangleProject2(Koan):
             triangle(1, 1, 3)
         with self.assertRaises(TriangleError):
             triangle(2, 5, 2)
+        with self.assertRaises(TriangleError):
+            triangle(6, 1, 2)
 
 
