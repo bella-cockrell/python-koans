@@ -32,9 +32,70 @@ from runner.koan import *
 #
 # Your goal is to write the score method.
 
-def score(dice):
-    # You need to write this method
-    pass
+import functools
+from typing import List
+
+def score(dice: List[int]):
+    single_roll_result = 0
+    triple_roll_result = 0
+    
+    check_for_no_rolls(dice)
+
+    roll_dict = {}
+    for item in dice:
+        if not item in roll_dict:
+            roll_dict[item] = 1
+        else:    
+            roll_dict[item] += 1
+
+    for key, value in roll_dict.items():
+        match key:
+            case 1:
+                if value >= 3:
+                    result = handle_triple_rule_for_1(value = value, 
+                                            single_roll_result= single_roll_result, 
+                                            triple_roll_result = triple_roll_result
+                                            )
+                    single_roll_result = result[0]
+                    triple_roll_result = result[1]
+                else:
+                    single_roll_result += value * 100
+            case 5:
+                if value >= 3:
+                    result = handle_triple_rule_for_5(value = value, 
+                                            single_roll_result= single_roll_result, 
+                                            triple_roll_result = triple_roll_result
+                                            )
+                    single_roll_result = result[0]
+                    triple_roll_result = result[1]
+                else:
+                    single_roll_result += value * 50
+            case other:
+                    if value >= 3:
+                        triple_roll_result += key * 100
+                    else:
+                        single_roll_result += 0
+    
+    return single_roll_result + triple_roll_result
+
+def check_for_no_rolls(dice):
+    if len(dice) == 0:
+        return 0
+
+def handle_triple_rule_for_1(value, single_roll_result, triple_roll_result):
+    floor = value // 3
+    remainder = value % 3
+    triple_roll_result += 1000 * floor
+    single_roll_result += 100 * remainder
+    return (single_roll_result, triple_roll_result)
+
+def handle_triple_rule_for_5(value, single_roll_result, triple_roll_result):
+    floor = value // 3
+    remainder = value % 3
+    triple_roll_result += 5 * 100 * floor
+    single_roll_result += 5 * 10 * remainder
+    return (single_roll_result, triple_roll_result)
+    
 
 class AboutScoringProject(Koan):
     def test_score_of_an_empty_list_is_zero(self):
@@ -63,7 +124,8 @@ class AboutScoringProject(Koan):
         self.assertEqual(600, score([6,6,6]))
 
     def test_score_of_mixed_is_sum(self):
-        self.assertEqual(250, score([2,5,2,2,3]))
+        self.assertEqual(250, score([2,5,2,2,3])) 
+        # the three 2s make 200 -- doesn't need to be ordered
         self.assertEqual(550, score([5,5,5,5]))
         self.assertEqual(1150, score([1,1,1,5,1]))
 
