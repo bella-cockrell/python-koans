@@ -11,7 +11,7 @@ class Hamster:
     def name(self):
         return "Phil"
 
-class _SecretSquirrel:
+class _SecretSquirrel: #underscore does actually do something here
     @property
     def name(self):
         return "Mr Anonymous"
